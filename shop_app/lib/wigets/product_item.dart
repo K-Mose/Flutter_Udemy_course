@@ -26,7 +26,7 @@ class ProductItem extends StatelessWidget {
           backgroundColor: Colors.black54,
           leading: IconButton(
             icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
-            onPressed: () => {},
+            onPressed: () => {product.changeFavoriteStatus()},
             color: Theme.of(context).accentColor,
           ),
           title: Text(
