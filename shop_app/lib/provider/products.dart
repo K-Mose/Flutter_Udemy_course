@@ -42,25 +42,14 @@ class Products with ChangeNotifier {
     ),
   ];
 
-  var _showFavoriteOnly = false;
-
-  void showFavoriteOnly() {
-    _showFavoriteOnly = true;
-    notifyListeners();
-  }
-
-  void showAll() {
-    _showFavoriteOnly = false;
-    notifyListeners();
-  }
-
   List<Product> get items {
-    if (_showFavoriteOnly) {
-      // _item을 복사한 객체를 리턴
-      return _items.where((e) => e.isFavorite).toList();
-    } else {
-      return [..._items];
-    }
+    // _item을 복사한 객체를 리턴
+    return [..._items];
+  }
+
+  List<Product> get favoritItems {
+    // _item을 복사한 객체를 리턴
+    return _items.where((p) => p.isFavorite).toList();
   }
 
   Product findById(String id) {

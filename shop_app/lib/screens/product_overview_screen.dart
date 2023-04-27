@@ -12,22 +12,31 @@ enum FilterOptions {
 
 typedef filter = FilterOptions;
 
-class ProductOverviewScreen extends StatelessWidget {  
+class ProductOverviewScreen extends StatefulWidget {  
   
   @override
+  State<ProductOverviewScreen> createState() => _ProductOverviewScreenState();
+}
+
+class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+  var _showOnlyFavorites = false;
+  @override
   Widget build(BuildContext context) {
-    final productsContainer = Provider.of<Products>(context);
+    // final productsContainer = Provider.of<Products>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('MyShop'),
         actions: [
           PopupMenuButton(
             onSelected: (filter selectedValue) {
-              if(selectedValue == filter.All) {
-                productsContainer.showAll();
-              } else if(selectedValue == filter.Favorites) {
-                productsContainer.showFavoriteOnly();
-              }
+              setState(() {
+                if(selectedValue == filter.All) {
+                    _showOnlyFavorites = false;
+                  
+                } else if(selectedValue == filter.Favorites) {
+                    _showOnlyFavorites = true;
+                }
+              });
             },
             icon: Icon(Icons.more_vert),
             itemBuilder: (_) => [
@@ -43,7 +52,7 @@ class ProductOverviewScreen extends StatelessWidget {
           )
         ],
       ),
-      body: ProductGrid(),
+      body: ProductGrid(_showOnlyFavorites),
     );
   }
 }
