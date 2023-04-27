@@ -14,8 +14,10 @@ class ProductGrid extends StatelessWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
-      itemBuilder: (context, index) => ChangeNotifierProvider(
-        create: (c) => products[index],
+      itemBuilder: (context, index) => ChangeNotifierProvider.value(
+        // create: (c) => products[index],
+        // 미리 생성된 값을 value에 넣음
+        value: products[index],
         child: ProductItem(
           // products[index].id,
           // products[index].title,

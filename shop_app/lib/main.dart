@@ -15,6 +15,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Provider 등록
+    // data가 context에 의존하지 않으면 value생성자 사용 가능(재사용 할 때 사용)
+    // return ChangeNotifierProvider.value(
+    //   value: Products(),
+    // create 사용 시 한번 위젯을 생성하고 나면 재생성하지 않음
+    // 새로운 인스턴스를 생성하고 제공 할 때 create / 생성된 인스턴스를 재사용 할 때 value
     return ChangeNotifierProvider(
       create: (ctx) => Products(),
       child: MaterialApp(
