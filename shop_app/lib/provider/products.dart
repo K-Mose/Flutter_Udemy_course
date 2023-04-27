@@ -7,7 +7,7 @@ Inheritance - extends
 Mixin - with 
 */
 class Products with ChangeNotifier {
-  List<Product> _items = [
+  final List<Product> _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -42,9 +42,25 @@ class Products with ChangeNotifier {
     ),
   ];
 
+  var _showFavoriteOnly = false;
+
+  void showFavoriteOnly() {
+    _showFavoriteOnly = true;
+    notifyListeners();
+  }
+
+  void showAll() {
+    _showFavoriteOnly = false;
+    notifyListeners();
+  }
+
   List<Product> get items {
-    // _item을 복사한 객체를 리턴
-    return [..._items];
+    if (_showFavoriteOnly) {
+      // _item을 복사한 객체를 리턴
+      return _items.where((e) => e.isFavorite).toList();
+    } else {
+      return [..._items];
+    }
   }
 
   Product findById(String id) {
