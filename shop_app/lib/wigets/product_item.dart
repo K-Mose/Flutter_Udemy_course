@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/provider/cart.dart';
 import 'package:shop_app/provider/product.dart';
 
 import '../screens/product_detail_screen.dart';
@@ -23,6 +24,7 @@ class ProductItem extends StatelessWidget {
     Consumer -> 하위 위젯을 consumer로 생성, 해당 부분만 rebuild
     */
     final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
@@ -42,7 +44,9 @@ class ProductItem extends StatelessWidget {
             ),
             trailing: IconButton(
               icon: const Icon(Icons.shopping_cart),
-              onPressed: () => {},
+              onPressed: () => {
+                cart.addItem(product.id, product.price, product.title)
+              },
               color: Theme.of(context).accentColor,
               ),
           ),
@@ -57,10 +61,10 @@ class ProductItem extends StatelessWidget {
                 arguments: product.id,
               );
             },
-            child: Image.network(
+            child: product.imageUrl.isNotEmpty ? Image.network(
               product.imageUrl,
               fit: BoxFit.cover,
-            ),
+            ) : const SizedBox(child: Text("")),
           ),
         ),
     );

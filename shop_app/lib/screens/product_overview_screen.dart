@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/provider/cart.dart';
 import 'package:shop_app/provider/products.dart';
 import '../wigets/product_grid.dart';
-import '../wigets/product_item.dart';
+import '../wigets/badges.dart';
 import '../provider/product.dart';
 
 enum FilterOptions {
@@ -12,7 +13,7 @@ enum FilterOptions {
 
 typedef filter = FilterOptions;
 
-class ProductOverviewScreen extends StatefulWidget {  
+class ProductOverviewScreen extends StatefulWidget {
   
   @override
   State<ProductOverviewScreen> createState() => _ProductOverviewScreenState();
@@ -49,6 +50,18 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 value: filter.All,
               ),
             ],
+          ),
+          Consumer<Cart>(
+            builder: (_, cart, child) => Badges(
+              child: child!,
+              value: cart.itemCount.toString(),
+            ),
+            child: IconButton(
+                onPressed: () {
+
+                },
+                icon: Icon(Icons.shopping_cart)
+            ),
           )
         ],
       ),
