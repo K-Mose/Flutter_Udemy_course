@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/provider/cart.dart';
-import 'package:shop_app/provider/products.dart';
+import '../provider/cart.dart';
+import 'package:shop_app/screens/cart_screen.dart';
 import '../wigets/product_grid.dart';
 import '../wigets/badges.dart';
-import '../provider/product.dart';
 
 enum FilterOptions {
   Favorites,
@@ -58,7 +57,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             ),
             child: IconButton(
                 onPressed: () {
-
+                  Navigator.of(context).pushNamed(
+                    CartScreen.routeName
+                  );
                 },
                 icon: Icon(Icons.shopping_cart)
             ),
