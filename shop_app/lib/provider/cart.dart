@@ -24,6 +24,10 @@ class Cart with ChangeNotifier {
     return _items.values.toList();
   }
 
+  List<String> get listItemKeys {
+    return _items.keys.toList();
+  }
+
   int get itemCount {
     return _items.length;
   }
@@ -32,7 +36,6 @@ class Cart with ChangeNotifier {
     _items.values.fold(0.0, (p, n) =>
       p + n.price
     );
-
 
   void addItem(String productId, double price, String title) {
     if (_items.containsKey(productId)) {
@@ -52,6 +55,11 @@ class Cart with ChangeNotifier {
               quantity: 1,
               price: price));
     }
+    notifyListeners();
+  }
+
+  void removeItem(String productId) {
+    _items.remove(productId);
     notifyListeners();
   }
 }
