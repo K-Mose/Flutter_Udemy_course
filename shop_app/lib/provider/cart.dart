@@ -34,7 +34,7 @@ class Cart with ChangeNotifier {
   
   double get totalAmount =>
     _items.values.fold(0.0, (p, n) =>
-      p + n.price
+      p + n.price * n.quantity
     );
 
   void addItem(String productId, double price, String title) {

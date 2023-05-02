@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/provider/cart.dart' show Cart; // 필요한 클래스만 가져옴
-import '../wigets/cart_item.dart'; // as alias; 별명 추가
+import '../provider/cart.dart' show Cart; // 필요한 클래스만 가져옴
+import '../widgets/cart_item.dart'; // as alias; 별명 추가
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
   static const routeName = "/cart";
@@ -30,7 +30,7 @@ class CartScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Chip(
                     label: Text(
-                      "\$${cart.totalAmount}",
+                      "\$${cart.totalAmount.toStringAsFixed(2)}",
                       style: TextStyle(
                         color: Theme.of(context)
                             .primaryTextTheme
@@ -56,6 +56,7 @@ class CartScreen extends StatelessWidget {
                   cart.listItems[index]!.price,
                   cart.listItems[index]!.quantity,
                   cart.listItems[index]!.title,
+                  cart.removeItem
                 ),
               )
           )

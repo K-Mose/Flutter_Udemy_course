@@ -9,12 +9,13 @@ class CartItem extends StatelessWidget {
   final double price;
   final int quantity;
   final String title;
-
-  const CartItem(Key key, this.id, this.productId, this.price, this.quantity, this.title)
+  final Function(String productId) removeItem;
+  const CartItem(Key key, this.id, this.productId, this.price, this.quantity, this.title, this.removeItem)
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return Dismissible( // android SwipeToDismiss
       key: ValueKey(id),
       background: Container(
@@ -29,7 +30,7 @@ class CartItem extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart, // right to left
       onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeItem(productId);
+        removeItem(productId);
       },
       child: Card(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
