@@ -15,7 +15,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    Provider.of<Cart>(context);
     return Dismissible( // android SwipeToDismiss
       key: ValueKey(id),
       background: Container(
