@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/provider/orders.dart';
 import '../provider/cart.dart' show Cart; // 필요한 클래스만 가져옴
 import '../widgets/cart_item.dart'; // as alias; 별명 추가
 class CartScreen extends StatelessWidget {
@@ -40,7 +41,13 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(onPressed: () {}, child: Text("ORDER NOW",),)
+                  TextButton(
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false).addOrder(cart.listItems, cart.totalAmount);
+                      cart.clearCart();
+                      print(Provider.of<Orders>(context,listen: false).orders);
+                    }, child: Text("ORDER NOW",),
+                  )
                 ],
               ),
             ),

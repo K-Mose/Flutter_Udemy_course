@@ -13,6 +13,11 @@ class OrderItem {
       required this.amount,
       required this.products,
       required this.dateTime});
+
+  @override
+  String toString() {
+    return 'OrderItem{id: $id, amount: $amount, products: $products, dateTime: $dateTime}';
+  }
 }
 
 class Orders with ChangeNotifier {
@@ -30,5 +35,10 @@ class Orders with ChangeNotifier {
         )
     );
     notifyListeners();
+  }
+
+  @override
+  String toString() {
+    return 'Orders{_orders: $_orders}';
   }
 }
