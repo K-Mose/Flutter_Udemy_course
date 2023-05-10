@@ -1,9 +1,10 @@
+import 'package:expense_tracker/widgets/expenses_list/expense_item.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:expense_tracker/model/expense.dart';
 
 class ExpensesList extends StatelessWidget {
-  ExpensesList({super.key, required this.expenses});
+  const ExpensesList({super.key, required this.expenses});
 
   final List<Expense> expenses;
 
@@ -13,9 +14,7 @@ class ExpensesList extends StatelessWidget {
       key: ObjectKey(expenses),
       // shrinkWrap: true, // unbounded height error
       itemCount: expenses.length,
-      itemBuilder: (context, index) {
-        return Text(expenses[index].title);
-      },
+      itemBuilder: (context, index) => ExpenseItem(expenses[index]),
     );
   }
 }
