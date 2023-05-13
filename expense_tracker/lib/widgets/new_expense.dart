@@ -64,7 +64,7 @@ class _NewExpenseState extends State<NewExpense> {
                 child: const Text("Enter")
               ),
               TextButton(onPressed: () {
-
+                Navigator.pop(context); // 현재 modal context를 pop시킴
               }, child: const Text("Cancel"))
             ],
           )
