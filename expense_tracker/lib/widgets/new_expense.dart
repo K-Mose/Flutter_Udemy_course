@@ -22,12 +22,14 @@ class _NewExpenseState extends State<NewExpense> {
       생성 후 더이상 필오하지 않다면 닫아줘야 함 > dispose 사용
    */
   final _titleController = TextEditingController();
+  final _amountController = TextEditingController();
+
   @override
   void dispose() {
     _titleController.dispose(); // 하지 않는다면 메모리 누수 발생
+    _amountController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,15 @@ class _NewExpenseState extends State<NewExpense> {
               label: Text("Title")
             ),
           ),
+          TextField(
+            controller: _amountController,
+            maxLength: 20,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              prefixText: "\$ ",
+              label: Text("Amount")
+            ),
+          ),
           Row(
             children: [
               ElevatedButton(
@@ -51,7 +62,10 @@ class _NewExpenseState extends State<NewExpense> {
                   print(_titleController.text);
                 },
                 child: const Text("Enter")
-              )
+              ),
+              TextButton(onPressed: () {
+
+              }, child: const Text("Cancel"))
             ],
           )
         ],
