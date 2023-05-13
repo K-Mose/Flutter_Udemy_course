@@ -12,12 +12,23 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   /*
   // TextField 입력방법
-  1. onChange 메소드 업데이트
-   */
+  1. onChange 메소드 업데이트[
   String _title = "";
   void _saveTitleInput(String inputValue) {
     _title = inputValue;
   }
+  2. TextEditingController 이용
+    - controller는 보이지 않는 상태에서도 메모리를 소모하므로
+      생성 후 더이상 필오하지 않다면 닫아줘야 함 > dispose 사용
+   */
+  final _titleController = TextEditingController();
+  @override
+  void dispose() {
+    _titleController.dispose(); // 하지 않는다면 메모리 누수 발생
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +36,8 @@ class _NewExpenseState extends State<NewExpense> {
       child: Column(
         children: [
           TextField(
-            onChanged: _saveTitleInput,
+            // onChanged: _saveTitleInput,
+            controller: _titleController,
             maxLength: 50,
             keyboardType: TextInputType.text,
             decoration: const InputDecoration(
@@ -35,7 +47,9 @@ class _NewExpenseState extends State<NewExpense> {
           Row(
             children: [
               ElevatedButton(
-                onPressed: () {print(_title);},
+                onPressed: () {
+                  print(_titleController.text);
+                },
                 child: const Text("Enter")
               )
             ],
