@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -23,15 +24,22 @@ class _NewExpenseState extends State<NewExpense> {
    */
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _selectedDate;
+  final formatter = DateFormat("y-MM-dd");
 
-  void _presentDatePicker() {
+  void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 100, now.month, now.day);
-    showDatePicker(
+    final selectedDate = await showDatePicker(
         context: context,
         initialDate: now,
         firstDate: firstDate,
         lastDate: now);
+    // async-await : await 이후 코드는 동기식으로 실행 됨. then으로 하면 then 내부에서만 Future로 받은 데이터 사용, 이후 코드는 비동기식으로 진행
+    setState(() {
+      print(selectedDate);
+      _selectedDate = selectedDate;
+    });
   }
 
   @override
@@ -77,7 +85,7 @@ class _NewExpenseState extends State<NewExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text("Selected Date"),
+                    Text(_selectedDate != null ? formatter.format(_selectedDate!) : "Selected Date"),
                     IconButton(
                         onPressed: _presentDatePicker,
                         icon: const Icon(Icons.calendar_month)
