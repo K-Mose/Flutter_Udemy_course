@@ -1,5 +1,8 @@
+import 'package:expense_tracker/model/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+final formatter = DateFormat("y-MM-dd");
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -25,7 +28,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
-  final formatter = DateFormat("y-MM-dd");
+  Category? _selectedCategory = Category.leisure;
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -95,17 +98,31 @@ class _NewExpenseState extends State<NewExpense> {
               )
             ],
           ),
+          SizedBox(height: 20,),
           Row(
             children: [
+              DropdownButton(
+                value: _selectedCategory,
+                items: Category.values
+                    .map((c) => DropdownMenuItem(
+                    value: c, // onChange의 타입으로 자동 매핑
+                    child: Text(c.name.toUpperCase())
+                )).toList(),
+                onChanged: (category) {
+                  setState(() {
+                    _selectedCategory = category ?? _selectedCategory;
+                  });
+                }),
+              const Spacer(),
+              TextButton(onPressed: () {
+                Navigator.pop(context); // 현재 modal context를 pop시킴
+              }, child: const Text("Cancel")),
               ElevatedButton(
                 onPressed: () {
                   print(_titleController.text);
                 },
-                child: const Text("Enter")
+                child: const Text("Save Expense")
               ),
-              TextButton(onPressed: () {
-                Navigator.pop(context); // 현재 modal context를 pop시킴
-              }, child: const Text("Cancel"))
             ],
           )
         ],
