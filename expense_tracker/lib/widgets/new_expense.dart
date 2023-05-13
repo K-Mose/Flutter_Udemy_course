@@ -24,6 +24,16 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
+  void _presentDatePicker() {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 100, now.month, now.day);
+    showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: now);
+  }
+
   @override
   void dispose() {
     _titleController.dispose(); // 하지 않는다면 메모리 누수 발생
@@ -46,14 +56,36 @@ class _NewExpenseState extends State<NewExpense> {
               label: Text("Title")
             ),
           ),
-          TextField(
-            controller: _amountController,
-            maxLength: 20,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              prefixText: "\$ ",
-              label: Text("Amount")
-            ),
+          Row(
+            children: [
+              // 공간 확보를 위해 Expanded
+              // Expanded가 2개이므로 1:1 비율로 생성됨
+              Expanded(
+                child: TextField(
+                  controller: _amountController,
+                  maxLength: 20,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    prefixText: "\$ ",
+                    label: Text("Amount")
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16,),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("Selected Date"),
+                    IconButton(
+                        onPressed: _presentDatePicker,
+                        icon: const Icon(Icons.calendar_month)
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
           Row(
             children: [
