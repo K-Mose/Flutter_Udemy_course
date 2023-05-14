@@ -19,7 +19,7 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<Expense> _registeredExpenses = [
+  final List<Expense> _registeredExpense = [
     Expense(
         title: "Hamburger",
         amount: 9.98,
@@ -104,7 +104,13 @@ class _ExpensesState extends State<Expenses> {
 
   void _addExpense(Expense expense) {
     setState(() {
-      _registeredExpenses.add(expense);
+      _registeredExpense.add(expense);
+    });
+  }
+
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpense.remove(expense);
     });
   }
 
@@ -124,7 +130,7 @@ class _ExpensesState extends State<Expenses> {
         body: Column(
           children: [
             const Text("The chart"),
-            Expanded(child: ExpensesList(expenses: _registeredExpenses))
+            Expanded(child: ExpensesList(expenses: _registeredExpense, removeExpense: _removeExpense,))
           ],
         ),
       ),
