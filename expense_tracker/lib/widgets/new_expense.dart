@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 final formatter = DateFormat("y-MM-dd");
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense(this._addExpense, {super.key});
+
+  final void Function(Expense expense) _addExpense;
 
   @override
   State<NewExpense> createState() {
@@ -65,6 +67,15 @@ class _NewExpenseState extends State<NewExpense> {
       ),);
       return;
     }
+    widget._addExpense(
+        Expense(
+          title: _titleController.text,
+          amount: amount,
+          date: _selectedDate!,
+          category: _selectedCategory!
+      )
+    );
+    Navigator.pop(context);
   }
 
   @override
@@ -120,7 +131,7 @@ class _NewExpenseState extends State<NewExpense> {
               )
             ],
           ),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20,),
           Row(
             children: [
               DropdownButton(
