@@ -45,6 +45,28 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
+  void _submitExpenseDate() {
+    // validate data
+    final amount = double.tryParse(_amountController.text);
+
+    if (_titleController.text.trim().isEmpty 
+        || amount == null || amount <= 0 || _selectedDate == null) {
+      showDialog(context: context, builder: (context) => AlertDialog(
+        title: const Text("Invalid Input"),
+        content: const Text("Please make sure a valid title, amount, date and category was entered."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Close")
+          ),
+        ],
+      ),);
+      return;
+    }
+  }
+
   @override
   void dispose() {
     _titleController.dispose(); // 하지 않는다면 메모리 누수 발생
@@ -118,9 +140,7 @@ class _NewExpenseState extends State<NewExpense> {
                 Navigator.pop(context); // 현재 modal context를 pop시킴
               }, child: const Text("Cancel")),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                },
+                onPressed: _submitExpenseDate,
                 child: const Text("Save Expense")
               ),
             ],
