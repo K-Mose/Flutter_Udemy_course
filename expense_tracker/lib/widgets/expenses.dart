@@ -95,9 +95,11 @@ class _ExpensesState extends State<Expenses> {
   ];
 
   void _openAddExpenseOverlay() {
-    showModalBottomSheet(context: context, builder: (context) => Container(
-      child: NewExpense(_addExpense),
-    ));
+    showModalBottomSheet(
+      isScrollControlled: true, // true -> fullscreen modal
+      context: context,
+      builder: (context) => NewExpense(_addExpense)
+    );
   }
 
   void _addExpense(Expense expense) {
