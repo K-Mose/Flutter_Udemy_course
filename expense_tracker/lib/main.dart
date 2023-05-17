@@ -31,8 +31,13 @@ void main() {
           titleLarge: TextStyle(
             fontWeight: FontWeight.normal,
             color: kColorScheme.secondaryContainer,
-            fontSize: 22) // appBar title
-          )
+            fontSize: 22), // appBar title
+          titleMedium: TextStyle(
+            fontWeight: FontWeight.normal,
+            color: kColorScheme.onSecondaryContainer,
+            fontSize: 14)
+
+          ),
       ),
       home: const Expenses(),
     )
