@@ -5,10 +5,32 @@ import 'package:expense_tracker/widgets/expenses.dart';
 var kColorScheme = ColorScheme //
     .fromSeed(seedColor: const Color.fromARGB(255, 123, 55, 1));
 
+var kDarkColorScheme = ColorScheme
+    .fromSeed(
+      brightness: Brightness.dark,
+      seedColor: const Color.fromARGB(255, 80, 25, 1)
+    );
+
 void main() {
   runApp(
     MaterialApp(
       // material3 사용
+      darkTheme: ThemeData.dark().copyWith(
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme().copyWith(
+          centerTitle: true
+        ),
+        colorScheme: kDarkColorScheme,
+        cardTheme: const CardTheme().copyWith(
+          color: kDarkColorScheme.secondaryContainer,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                backgroundColor: kDarkColorScheme.primaryContainer
+            )
+        ),
+      ),
       theme: ThemeData().copyWith(
         useMaterial3: true,
         // scaffoldBackgroundColor: Colors.blueGrey,
@@ -39,6 +61,7 @@ void main() {
 
           ),
       ),
+      // themeMode: ThemeMode.light, // theme 강제 사용
       home: const Expenses(),
     )
   );
