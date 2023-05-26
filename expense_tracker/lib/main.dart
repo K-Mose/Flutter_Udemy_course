@@ -14,11 +14,11 @@ var kDarkColorScheme = ColorScheme
 
 void main() {
   // 앱의 화면 허용 방향 설정 > 화면 rotation 방지
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp
-  ]).then((fn) =>
-  {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp
+  // ]).then((fn) =>
+  // {
     runApp(
         MaterialApp(
           // material3 사용
@@ -71,6 +71,6 @@ void main() {
           // themeMode: ThemeMode.light, // theme 강제 사용
           home: const Expenses(),
         )
-    )
-  });
+    );
+  // });
 }
