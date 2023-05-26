@@ -87,76 +87,84 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        children: [
-          TextField(
-            // onChanged: _saveTitleInput,
-            controller: _titleController,
-            maxLength: 50,
-            keyboardType: TextInputType.text,
-            decoration: const InputDecoration(
-              label: Text("Title")
-            ),
-          ),
-          Row(
+    // 바닥과의 offset
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return SizedBox( //꽉찬 모달창으로 띄우기 위해
+      height: double.infinity,
+      // 키보드가 올라왔을 때 하위 항목들을 볼 수 있게 스크롤링 추가
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(16, 48, 16, keyboardSpace + 16), // 키보드가 올라오는 위치만큼 bottom padding 추가
+          child: Column(
             children: [
-              // 공간 확보를 위해 Expanded
-              // Expanded가 2개이므로 1:1 비율로 생성됨
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  maxLength: 20,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    prefixText: "\$ ",
-                    label: Text("Amount")
-                  ),
+              TextField(
+                // onChanged: _saveTitleInput,
+                controller: _titleController,
+                maxLength: 50,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  label: Text("Title")
                 ),
               ),
-              const SizedBox(width: 16,),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(_selectedDate != null ? formatter.format(_selectedDate!) : "Selected Date"),
-                    IconButton(
-                        onPressed: _presentDatePicker,
-                        icon: const Icon(Icons.calendar_month)
+              Row(
+                children: [
+                  // 공간 확보를 위해 Expanded
+                  // Expanded가 2개이므로 1:1 비율로 생성됨
+                  Expanded(
+                    child: TextField(
+                      controller: _amountController,
+                      maxLength: 20,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        prefixText: "\$ ",
+                        label: Text("Amount")
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 16,),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(_selectedDate != null ? formatter.format(_selectedDate!) : "Selected Date"),
+                        IconButton(
+                            onPressed: _presentDatePicker,
+                            icon: const Icon(Icons.calendar_month)
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20,),
+              Row(
+                children: [
+                  DropdownButton(
+                    value: _selectedCategory,
+                    items: Category.values
+                        .map((c) => DropdownMenuItem(
+                        value: c, // onChange의 타입으로 자동 매핑
+                        child: Text(c.name.toUpperCase())
+                    )).toList(),
+                    onChanged: (category) {
+                      setState(() {
+                        _selectedCategory = category ?? _selectedCategory;
+                      });
+                    }),
+                  const Spacer(),
+                  TextButton(onPressed: () {
+                    Navigator.pop(context); // 현재 modal context를 pop시킴
+                  }, child: const Text("Cancel")),
+                  ElevatedButton(
+                    onPressed: _submitExpenseDate,
+                    child: const Text("Save Expense")
+                  ),
+                ],
               )
             ],
           ),
-          const SizedBox(height: 20,),
-          Row(
-            children: [
-              DropdownButton(
-                value: _selectedCategory,
-                items: Category.values
-                    .map((c) => DropdownMenuItem(
-                    value: c, // onChange의 타입으로 자동 매핑
-                    child: Text(c.name.toUpperCase())
-                )).toList(),
-                onChanged: (category) {
-                  setState(() {
-                    _selectedCategory = category ?? _selectedCategory;
-                  });
-                }),
-              const Spacer(),
-              TextButton(onPressed: () {
-                Navigator.pop(context); // 현재 modal context를 pop시킴
-              }, child: const Text("Cancel")),
-              ElevatedButton(
-                onPressed: _submitExpenseDate,
-                child: const Text("Save Expense")
-              ),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
