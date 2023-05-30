@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:expense_tracker/model/expense.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -47,24 +50,43 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
+  void _showDialog() {
+    if(Platform.isAndroid) {
+      showDialog(context: context, builder: (context) => AlertDialog(
+        title: const Text("Invalid Input"),
+        content: const Text("Please make sure a valid title, amount, date and category was entered."),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Close")
+          ),
+        ],
+      ),);
+    } else {
+      showCupertinoDialog(context: context, builder: (context) => CupertinoAlertDialog(
+        title: const Text("Invalid Input"),
+        content: const Text("Please make sure a valid title, amount, date and category was entered."),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Close")
+          ),
+        ],
+      ));
+    }
+  }
+
   void _submitExpenseDate() {
     // validate data
     final amount = double.tryParse(_amountController.text);
 
     if (_titleController.text.trim().isEmpty 
         || amount == null || amount <= 0 || _selectedDate == null) {
-      showDialog(context: context, builder: (context) => AlertDialog(
-        title: const Text("Invalid Input"),
-        content: const Text("Please make sure a valid title, amount, date and category was entered."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text("Close")
-          ),
-        ],
-      ),);
+      _showDialog();
       return;
     }
     widget._addExpense(
