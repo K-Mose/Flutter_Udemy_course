@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Category {
-  Category({
+  const Category({
    required this.id,
    required this.title,
    this.color = Colors.white
