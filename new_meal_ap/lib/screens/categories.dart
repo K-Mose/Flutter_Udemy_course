@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:new_meal_ap/data/dummy_data.dart';
+import 'package:new_meal_ap/widgets/category_grid_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});
@@ -9,7 +11,7 @@ class CategoriesScreen extends StatelessWidget {
         title: const Text("Pick your category"),
       ),
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: GridView(
           // 그리드뷰의 자식들을 컨트롤하는 델리게이터
           // crossAxisCount : Left to right
@@ -22,13 +24,8 @@ class CategoriesScreen extends StatelessWidget {
             mainAxisSpacing: 20
           ),
           children: [
-            Expanded(child: Container(color: Colors.white,child: const Text("1"),)),
-            Expanded(child: Container(color: Colors.white12,child: const Text("1"),)),
-            Expanded(child: Container(color: Colors.white24,child: const Text("1"),)),
-            Expanded(child: Container(color: Colors.white38,child: const Text("1"),)),
-            Expanded(child: Container(color: Colors.white54,child: const Text("1"),)),
-            Expanded(child: Container(color: Colors.white60,child: const Text("1"),)),
-            Expanded(child: Container(color: Colors.white70,child: const Text("1"),)),
+            for (final category in availableCategories)
+              CategoryGridItem(category: category)
           ],
         ),
       ),
