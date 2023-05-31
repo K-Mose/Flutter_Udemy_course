@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme,
-      home: SafeArea(child: CategoriesScreen()),
+      home: const SafeArea(child: CategoriesScreen()),
     );
   }
 }
