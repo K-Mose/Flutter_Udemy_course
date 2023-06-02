@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_meal_ap/data/dummy_data.dart';
+import 'package:new_meal_ap/model/meal.dart';
 import 'package:new_meal_ap/screens/categories.dart';
 import 'package:new_meal_ap/screens/meals.dart';
 
@@ -13,9 +14,19 @@ class _TabScreenState extends State<TabsScreen> {
   // 네비게이션의 초기 인덱스 값 설정
   int _selectedPageIndex = 0;
 
+  final List<Meal> _favoriteMeals = [];
+
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
+    });
+  }
+
+  void _toggleMealFavoriteStatus(Meal meal) {
+    setState(() {
+      _favoriteMeals.contains(meal) ?
+        _favoriteMeals.remove(meal) :
+        _favoriteMeals.add(meal);
     });
   }
 
@@ -23,8 +34,8 @@ class _TabScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     Widget activePage = (_selectedPageIndex == 0) ?
-      const CategoriesScreen() :
-      const MealsScreen(meals: []);
+    CategoriesScreen(toggleMealFavoriteStatus: _toggleMealFavoriteStatus,) :
+      MealsScreen(meals: _favoriteMeals, toggleMealFavoriteStatus: _toggleMealFavoriteStatus,);
     return Scaffold(
       appBar: AppBar(
         title: Text(_getTitle),
