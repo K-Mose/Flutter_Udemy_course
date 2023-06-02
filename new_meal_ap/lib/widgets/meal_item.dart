@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:new_meal_ap/model/meal.dart';
+import 'package:new_meal_ap/screens/meal_detail_screen.dart';
 import 'package:new_meal_ap/widgets/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealItem extends StatelessWidget {
   const MealItem({
     super.key,
-    required this.meal
+    required this.meal,
+    required this.selectMeal
     });
   final Meal meal;
+  final Function(Meal meal) selectMeal;
 
   String get complexityText {
     return meal.complexity.name[0].toUpperCase()
@@ -32,7 +35,9 @@ class MealItem extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       elevation: 5,
       child: InkWell(
-      onTap: () {print(meal.title);},
+      onTap: () {
+        selectMeal(meal);
+      },
       // jetpack의 box와 비슷
       child: Stack(
         children: [
