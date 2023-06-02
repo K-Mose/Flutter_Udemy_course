@@ -22,11 +22,30 @@ class _TabScreenState extends State<TabsScreen> {
     });
   }
 
+  void _showInfoMessage(String message) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        action: SnackBarAction(
+          label: "close",
+          onPressed: () {
+            ScaffoldMessenger.of(context).clearSnackBars();
+          },
+        ),
+      )
+    );
+  }
+
   void _toggleMealFavoriteStatus(Meal meal) {
     setState(() {
-      _favoriteMeals.contains(meal) ?
-        _favoriteMeals.remove(meal) :
-        _favoriteMeals.add(meal);
+      _favoriteMeals.contains(meal) ? {
+        _showInfoMessage("Meal is no longer a favorite."),
+        _favoriteMeals.remove(meal)
+      } : {
+        _showInfoMessage("Marked as a favorite!"),
+        _favoriteMeals.add(meal)
+      };
     });
   }
 
