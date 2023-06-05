@@ -3,6 +3,7 @@ import 'package:new_meal_ap/data/dummy_data.dart';
 import 'package:new_meal_ap/model/meal.dart';
 import 'package:new_meal_ap/screens/categories.dart';
 import 'package:new_meal_ap/screens/meals.dart';
+import 'package:new_meal_ap/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
 
@@ -59,6 +60,7 @@ class _TabScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(_getTitle),
       ),
+      drawer: const MainDrawer(),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         // 선택된 아이템의 인덱스를 인자로 받음
