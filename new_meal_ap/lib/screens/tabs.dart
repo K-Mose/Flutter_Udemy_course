@@ -23,14 +23,16 @@ class _TabScreenState extends State<TabsScreen> {
       _selectedPageIndex = index;
     });
   }
-
-  void _setScreen(String identifier) {
+  late final filter;
+  void _setScreen(String identifier) async {
     Navigator.of(context).pop();
     if (identifier == "/filter") {
-      Navigator.of(context).push(
+      // push된 화면에서 pop으로 전달받은 데이터를 Future<T>으로 받음
+       filter = await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(builder: (context) => const FilterScreen(),)
       );
     }
+    print(filter);
   }
 
   void _showInfoMessage(String message) {
