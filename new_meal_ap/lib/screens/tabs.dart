@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:new_meal_ap/data/dummy_data.dart';
 import 'package:new_meal_ap/model/meal.dart';
 import 'package:new_meal_ap/screens/categories.dart';
+import 'package:new_meal_ap/screens/filters.dart';
 import 'package:new_meal_ap/screens/meals.dart';
 import 'package:new_meal_ap/widgets/main_drawer.dart';
 
@@ -21,6 +22,15 @@ class _TabScreenState extends State<TabsScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  void _setScreen(String identifier) {
+    Navigator.of(context).pop();
+    if (identifier == "/filter") {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const FilterScreen(),)
+      );
+    }
   }
 
   void _showInfoMessage(String message) {
@@ -60,7 +70,9 @@ class _TabScreenState extends State<TabsScreen> {
       appBar: AppBar(
         title: Text(_getTitle),
       ),
-      drawer: const MainDrawer(),
+      drawer: MainDrawer(
+        onSelectScreen: _setScreen
+      ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         // 선택된 아이템의 인덱스를 인자로 받음
