@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:new_meal_ap/data/dummy_data.dart';
 import 'package:new_meal_ap/model/meal.dart';
+import 'package:new_meal_ap/providers/meal_provider.dart';
 import 'package:new_meal_ap/screens/categories.dart';
 import 'package:new_meal_ap/screens/filters.dart';
 import 'package:new_meal_ap/screens/meals.dart';
 import 'package:new_meal_ap/widgets/main_drawer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const kInitialFilters = {
   Filter.glutenFree: false,
@@ -13,13 +15,14 @@ const kInitialFilters = {
   Filter.vegetarian: false
 };
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends ConsumerStatefulWidget {
+  TabsScreen({super.key});
 
   @override
-  State createState() => _TabScreenState();
+  ConsumerState createState() => _TabScreenState();
 }
 
-class _TabScreenState extends State<TabsScreen> {
+class _TabScreenState extends ConsumerState<TabsScreen> {
   // 네비게이션의 초기 인덱스 값 설정
   int _selectedPageIndex = 0;
 
@@ -75,7 +78,8 @@ class _TabScreenState extends State<TabsScreen> {
   get _getTitle => (_selectedPageIndex == 0) ? "Categories" : "Your Favorites";
   @override
   Widget build(BuildContext context) {
-    final availableMeals = dummyMeals.where( (meal) =>
+    final meals = ref.watch(mealsProvider); // ref - provider 사용 리스너
+    final availableMeals = meals.where( (meal) =>
       (_selectedFilter[Filter.glutenFree]! && !meal.isGlutenFree) ? false :
       (_selectedFilter[Filter.lactoseFree]! && !meal.isLactoseFree) ? false :
       (_selectedFilter[Filter.vegetarian]! && !meal.isVegetarian) ? false :
