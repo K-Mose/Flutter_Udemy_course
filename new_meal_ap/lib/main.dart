@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_meal_ap/screens/categories.dart';
 import 'package:new_meal_ap/screens/tabs.dart';
@@ -13,7 +14,8 @@ final theme = ThemeData(
 );
 
 void main() {
-  runApp(const MyApp());
+  // ProviderScope를 사용해 프로젝트가 riverpod을 사용하도록 허용
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
