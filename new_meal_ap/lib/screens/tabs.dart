@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:new_meal_ap/data/dummy_data.dart';
-import 'package:new_meal_ap/model/meal.dart';
 import 'package:new_meal_ap/providers/favorites_provider.dart';
 import 'package:new_meal_ap/providers/filter_provider.dart';
 import 'package:new_meal_ap/providers/meal_provider.dart';
@@ -43,15 +41,8 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
   get _getTitle => (_selectedPageIndex == 0) ? "Categories" : "Your Favorites";
   @override
   Widget build(BuildContext context) {
-    final meals = ref.watch(mealsProvider); // ref - provider 사용 리스너
-    final activeFilter = ref.watch(filterProvider);
-    final availableMeals = meals.where( (meal) =>
-      (activeFilter[Filter.glutenFree]! && !meal.isGlutenFree) ? false :
-      (activeFilter[Filter.lactoseFree]! && !meal.isLactoseFree) ? false :
-      (activeFilter[Filter.vegetarian]! && !meal.isVegetarian) ? false :
-      (activeFilter[Filter.vegan]! && !meal.isVegan) ? false :
-      true
-    ).toList();
+    // ref - provider 사용 리스너
+    final availableMeals = ref.watch(filteredMealsProvider);
     final favoriteMeals = ref.watch(favoriteMealsProvider);
     Widget activePage = (_selectedPageIndex == 0) ?
     CategoriesScreen(availableMeals: availableMeals) :
