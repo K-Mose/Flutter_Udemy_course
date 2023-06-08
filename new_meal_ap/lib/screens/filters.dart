@@ -1,23 +1,16 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:new_meal_ap/providers/filter_provider.dart';
 
-enum Filter {
-  glutenFree,
-  lactoseFree,
-  vegetarian,
-  vegan
-}
-
-class FilterScreen extends StatefulWidget {
-  const FilterScreen({Key? key, required this.currentFilters}) : super(key: key);
-
-  final Map<Filter, bool> currentFilters;
+class FilterScreen extends ConsumerStatefulWidget {
+  const FilterScreen({Key? key}) : super(key: key);
 
   @override
-  State<FilterScreen> createState() => _FilterScreenState();
+  ConsumerState<FilterScreen> createState() => _FilterScreenState();
 }
 
-class _FilterScreenState extends State<FilterScreen> {
+class _FilterScreenState extends ConsumerState<FilterScreen> {
 
   var _isGlutenFree = false;
   var _isLactoseFree = false;
@@ -27,10 +20,11 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    _isGlutenFree = widget.currentFilters[Filter.glutenFree]!;
-    _isLactoseFree = widget.currentFilters[Filter.lactoseFree]!;
-    _isVegetarian = widget.currentFilters[Filter.vegetarian]!;
-    _isVegan = widget.currentFilters[Filter.vegan]!;
+    final activeFilter = ref.read(filterProvider);
+    _isGlutenFree = activeFilter[Filter.glutenFree]!;
+    _isLactoseFree = activeFilter[Filter.lactoseFree]!;
+    _isVegetarian = activeFilter[Filter.vegetarian]!;
+    _isVegan = activeFilter[Filter.vegan]!;
   }
   @override
   Widget build(BuildContext context) {
@@ -41,7 +35,13 @@ class _FilterScreenState extends State<FilterScreen> {
       //
       body: WillPopScope(
         onWillPop: () async {
-          // pop 에서 넘어가는 화면에 모든 타입의 데이터를 보낼 수 있음
+          ref.read(filterProvider.notifier).setFilters({
+            Filter.glutenFree: _isGlutenFree,
+            Filter.lactoseFree: _isLactoseFree,
+            Filter.vegan: _isVegan,
+            Filter.vegetarian: _isVegetarian
+          });
+          /*// pop 에서 넘어가는 화면에 모든 타입의 데이터를 보낼 수 있음
           Navigator.of(context).pop({
             Filter.glutenFree: _isGlutenFree,
             Filter.lactoseFree: _isLactoseFree,
@@ -49,8 +49,9 @@ class _FilterScreenState extends State<FilterScreen> {
             Filter.vegetarian: _isVegetarian
           });
           // true -> leave screen / false -> stay in
-          // 여기서는 pop을 통해서 스크린에서 나감
-          return false;
+          // 여기서는 pop을 통해서 스크린에서 나감*/
+          // riverpod으로 관리하기 때문에 pop으로 넘어가지 않아도 됨
+          return true;
         },
         child: Column(
           children: [

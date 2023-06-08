@@ -11,7 +11,7 @@ final favoriteMealsProvider =
 //StateNotifierProvider는 StateNotifier를 상속받는 클래스와 같이 사용함
 class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
   // initial value
-  FavoriteMealsNotifier(): super([]); // notifier에 저장할 초기 데이터 super에 전달
+  FavoriteMealsNotifier() : super([]); // notifier에 저장할 초기 데이터 super에 전달
 
   // Immediately invoking an anonymous function (){...}()
   bool toggleMealFavoriteStatus(Meal meal) =>
