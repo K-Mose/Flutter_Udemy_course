@@ -15,6 +15,12 @@ class MealDetailScreen extends ConsumerWidget {
 
   @override // ConsumerWidget의 WigdetRef를 통해서 Provider에 접근
   Widget build(BuildContext context, WidgetRef ref) {
+    // final favoriteMeals = ref.watch(favoriteMealsProvider);
+    // final isFavorite = favoriteMeals.contains(selectedMeal);
+    ref.watch(favoriteMealsProvider); // ref.watch(provider.notifier);로는 작동하지 않음
+    // riverpod에 notifier가 아닌 provider를 watch 한다고 알려야 rebuild가 일어나는 듯?
+    final isFavorite = ref.read(favoriteMealsProvider.notifier).isFavorite(selectedMeal);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedMeal.title),
@@ -39,7 +45,7 @@ class MealDetailScreen extends ConsumerWidget {
                   )
               );
             },
-            icon: const Icon(Icons.star)
+            icon: Icon(isFavorite! ? Icons.star : Icons.star_border)
           )
         ],
       ),
