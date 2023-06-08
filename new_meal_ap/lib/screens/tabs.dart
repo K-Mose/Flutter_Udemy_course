@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:new_meal_ap/data/dummy_data.dart';
 import 'package:new_meal_ap/model/meal.dart';
+import 'package:new_meal_ap/providers/favorites_provider.dart';
 import 'package:new_meal_ap/providers/meal_provider.dart';
 import 'package:new_meal_ap/screens/categories.dart';
 import 'package:new_meal_ap/screens/filters.dart';
@@ -26,8 +27,6 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
   // 네비게이션의 초기 인덱스 값 설정
   int _selectedPageIndex = 0;
 
-  final List<Meal> _favoriteMeals = [];
-
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
@@ -45,34 +44,6 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
          _selectedFilter = result ?? kInitialFilters;
        });
     }
-    print(_selectedFilter);
-  }
-
-  void _showInfoMessage(String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        action: SnackBarAction(
-          label: "close",
-          onPressed: () {
-            ScaffoldMessenger.of(context).clearSnackBars();
-          },
-        ),
-      )
-    );
-  }
-
-  void _toggleMealFavoriteStatus(Meal meal) {
-    setState(() {
-      _favoriteMeals.contains(meal) ? {
-        _showInfoMessage("Meal is no longer a favorite."),
-        _favoriteMeals.remove(meal)
-      } : {
-        _showInfoMessage("Marked as a favorite!"),
-        _favoriteMeals.add(meal)
-      };
-    });
   }
 
   get _getTitle => (_selectedPageIndex == 0) ? "Categories" : "Your Favorites";
@@ -86,9 +57,12 @@ class _TabScreenState extends ConsumerState<TabsScreen> {
       (_selectedFilter[Filter.vegan]! && !meal.isVegan) ? false :
       true
     ).toList();
+    final favoriteMeals = ref.watch(favoriteMealsProvider);
     Widget activePage = (_selectedPageIndex == 0) ?
-    CategoriesScreen(toggleMealFavoriteStatus: _toggleMealFavoriteStatus, availableMeals: availableMeals) :
-      MealsScreen(meals: _favoriteMeals, toggleMealFavoriteStatus: _toggleMealFavoriteStatus,);
+    CategoriesScreen(availableMeals: availableMeals) :
+      MealsScreen(
+        meals: favoriteMeals,
+      );
     return Scaffold(
       appBar: AppBar(
         title: Text(_getTitle),

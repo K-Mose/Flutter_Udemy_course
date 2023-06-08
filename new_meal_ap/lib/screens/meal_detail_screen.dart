@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:new_meal_ap/model/meal.dart';
+import 'package:new_meal_ap/providers/favorites_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MealDetailScreen extends StatelessWidget {
+// WidgetRef를 사용하기 위해 ConsumerWidget으로 변경
+class MealDetailScreen extends ConsumerWidget {
   const MealDetailScreen({
     Key? key,
     required this.selectedMeal,
-    required this.toggleMealFavoriteStatus
   }) : super(key: key);
 
   final Meal selectedMeal;
-  final Function(Meal meal) toggleMealFavoriteStatus;
 
-  @override
-  Widget build(BuildContext context) {
+  @override // ConsumerWidget의 WigdetRef를 통해서 Provider에 접근
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(selectedMeal.title),
         actions: [
           IconButton(
             onPressed: () {
-              toggleMealFavoriteStatus(selectedMeal);
+              // FavoriteMealsNotifier에 접근하기 위해 provider의 notifier를 호출
+              final message = ref.read(favoriteMealsProvider.notifier)
+                  .toggleMealFavoriteStatus(selectedMeal)
+                  ? "Meal added as a favorites."
+                  : "Meal removed.";
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                    action: SnackBarAction(
+                      label: "close",
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                      },
+                    ),
+                  )
+              );
             },
             icon: const Icon(Icons.star)
           )

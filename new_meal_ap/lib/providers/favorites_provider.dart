@@ -13,13 +13,15 @@ class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
   // initial value
   FavoriteMealsNotifier(): super([]); // notifier에 저장할 초기 데이터 super에 전달
 
-  void toggleMealFavoriteStatus(Meal meal) {
-    // 상태는 불변값이므로 상태에 대하여 add나 remove등을 할 수 없다.
-    // -> 상태에 값을 재할당
-    if(!state.contains(meal)) {
-      state = [...state, meal];
-    }  else {
-      state = state.where((m) => m.id != meal.id).toList();
-    }
-  }
+  // Immediately invoking an anonymous function (){...}()
+  bool toggleMealFavoriteStatus(Meal meal) =>
+      // 상태는 불변값이므로 상태에 대하여 add나 remove등을 할 수 없다.
+      // -> 상태에 값을 재할당
+      (!state.contains(meal)) ? () {
+        state = [...state, meal];
+        return true;
+      }() : () {
+        state = state.where((m) => m.id != meal.id).toList();
+        return false;
+      }();
 }
