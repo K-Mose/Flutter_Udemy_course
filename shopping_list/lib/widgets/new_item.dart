@@ -18,7 +18,25 @@ class _NewItemState extends State<NewItem> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: Text("The Form"),
+        // Form - Combination of input fields
+        child: Form(
+          child: Column(
+            children: [
+              // user input
+              TextFormField( // instead of TextField(), Form feature
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text("Name")
+                ),
+                // flutter에서 내부적으로 validate 처리
+                validator: (value) {
+                  // return validation message
+                  return 'Demo validation';
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
