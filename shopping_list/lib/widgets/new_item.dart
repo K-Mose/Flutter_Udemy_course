@@ -32,7 +32,12 @@ class _NewItemState extends State<NewItem> {
                 // flutter에서 내부적으로 validate 처리
                 validator: (value) {
                   // return validation message
-                  return 'Demo validation';
+                  // return null -> success / Stirng -> validated
+                  if (value == null || value.isEmpty
+                      || value.trim().length <= 1 || value.trim().length > 50) {
+                    return "Must be between 1 and 50 characters.";
+                  }
+                  return null;
                 },
               ),
               Row(
@@ -44,6 +49,15 @@ class _NewItemState extends State<NewItem> {
                         label: Text("Quantity")
                       ),
                       initialValue: "1",
+                      validator: (value) {
+                        if (value == null
+                            || value.isEmpty
+                            || int.tryParse(value) == null
+                            || int.tryParse(value)! <= 0) {
+                          return "Must be a valid, positive number.";
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 8,),
@@ -82,7 +96,9 @@ class _NewItemState extends State<NewItem> {
                   ),
                   const SizedBox(width: 20,),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                    },
                     child: const Text("Add Item")
                   )
                 ],
