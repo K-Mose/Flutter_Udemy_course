@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
+import 'package:shopping_list/models/category.dart';
 
 class NewItem extends StatefulWidget {
 
@@ -10,6 +11,24 @@ class NewItem extends StatefulWidget {
 }
 
 class _NewItemState extends State<NewItem> {
+  // globalKey는 보통 form에서만 사용
+  // FormState 타입의 키를 생성
+  final _formKey = GlobalKey<FormState>();
+  var _enteredName = "";
+  var _enteredQuantity = 0;
+  var _selectedCategory = categories[Categories.vegetables]; // 초기값설정
+  final tc = TextEditingController();
+  var controller = TextEditingController();
+  void _saveItem() {
+    // formState에 속해있는 모든 validation 실행, pass: true, fail: false
+    if(_formKey.currentState!.validate()) {
+      // 상태에 formField 이터를 저장
+      _formKey.currentState!.save();
+      print(_enteredName);
+      print(_enteredQuantity);
+      print(_selectedCategory);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +40,13 @@ class _NewItemState extends State<NewItem> {
         padding: const EdgeInsets.all(12),
         // Form - Combination of input fields
         child: Form(
+          key: _formKey, // key를 이용하여 Form에 접근
           child: Column(
             children: [
               // user input
               TextFormField( // instead of TextField(), Form feature
                 maxLength: 50,
+                controller: tc,
                 decoration: const InputDecoration(
                   label: Text("Name")
                 ),
@@ -39,6 +60,10 @@ class _NewItemState extends State<NewItem> {
                   }
                   return null;
                 },
+                // FormState에서 save가 호출 됐을 때
+                onSaved: (value) {
+                  _enteredName = value!;
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -48,6 +73,7 @@ class _NewItemState extends State<NewItem> {
                       decoration: const InputDecoration(
                         label: Text("Quantity")
                       ),
+                      keyboardType: TextInputType.number,
                       initialValue: "1",
                       validator: (value) {
                         if (value == null
@@ -58,30 +84,37 @@ class _NewItemState extends State<NewItem> {
                         }
                         return null;
                       },
+                      onSaved: (value) {
+                        _enteredQuantity = int.parse(value!);
+                      },
                     ),
                   ),
                   const SizedBox(width: 8,),
                   Expanded(
-                    child: DropdownButtonFormField(items: [
-                      for(final category in categories.entries)
-                        DropdownMenuItem(
-                          // 카테고리 객체 자체를 value로 할당
-                          value: category.value,
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 16,
-                                height: 16,
-                                color: category.value.color,
-                              ),
-                              const SizedBox(width: 6,),
-                              Text(category.value.name)
-                            ],
-                          )
+                    child: DropdownButtonFormField(
+                      // dropdown에서 내부적으로 관리하는 값
+                      value: _selectedCategory,
+                      items: [
+                        for(final category in categories.entries)
+                          DropdownMenuItem(
+                            // 카테고리 객체 자체를 value로 할당
+                            value: category.value,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  color: category.value.color,
+                                ),
+                                const SizedBox(width: 6,),
+                                Text(category.value.name)
+                              ],
+                            )
                         )
                     ],
                     onChanged: (value) {
-                      print(value);
+                      _selectedCategory = value;
+                      print(_selectedCategory!.name);
                     }),
                   )
                 ],
@@ -91,14 +124,14 @@ class _NewItemState extends State<NewItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _formKey.currentState!.reset();
+                    },
                     child: const Text("Reset")
                   ),
                   const SizedBox(width: 20,),
                   ElevatedButton(
-                    onPressed: () {
-
-                    },
+                    onPressed: _saveItem,
                     child: const Text("Add Item")
                   )
                 ],
