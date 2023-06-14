@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
+
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/category.dart';
 import 'package:shopping_list/models/grocery_item.dart';
+import 'package:shopping_list/utils/constants.dart';
 
 class NewItem extends StatefulWidget {
 
@@ -25,16 +31,29 @@ class _NewItemState extends State<NewItem> {
     if(_formKey.currentState!.validate()) {
       // 상태에 formField 이터를 저장
       _formKey.currentState!.save();
-      print(_enteredName);
-      print(_enteredQuantity);
-      print(_selectedCategory);
+      // httsp(url without protocol, path,
+      final url = Uri.https(BASE_URL, 'shopping-list.json' );
+      print("request post, $url");
+      // Http request
+      http.post(
+        url,
+        headers: {
+          "Content-Type": 'application/json'
+        },
+          // convert data to json format
+        body: json.encode({
+          "name": _enteredName,
+          "quantity": _enteredQuantity,
+          "category": _selectedCategory!.name
+        })
+      );
       // meal app 에서 사용했던 pop으로 데이터 넘기기
-      Navigator.of(context).pop(GroceryItem(
+      /*Navigator.of(context).pop(GroceryItem(
           id: DateTime.now().toString(),
           name: _enteredName,
           quantity: _enteredQuantity,
           category: _selectedCategory!
-      ));
+      ));*/
     }
   }
 
