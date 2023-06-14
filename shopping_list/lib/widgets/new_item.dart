@@ -26,7 +26,7 @@ class _NewItemState extends State<NewItem> {
   var _selectedCategory = categories[Categories.vegetables]; // 초기값설정
   final tc = TextEditingController();
   var controller = TextEditingController();
-  void _saveItem() {
+  void _saveItem() async {
     // formState에 속해있는 모든 validation 실행, pass: true, fail: false
     if(_formKey.currentState!.validate()) {
       // 상태에 formField 이터를 저장
@@ -35,7 +35,7 @@ class _NewItemState extends State<NewItem> {
       final url = Uri.https(BASE_URL, 'shopping-list.json' );
       print("request post, $url");
       // Http request
-      http.post(
+      final response = await http.post(
         url,
         headers: {
           "Content-Type": 'application/json'
@@ -47,6 +47,20 @@ class _NewItemState extends State<NewItem> {
           "category": _selectedCategory!.name
         })
       );
+      // Future type으로 받을 시
+      /*.then((response) {
+        print(response);
+        print(response.body);
+        // work with response
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          Navigator.of(context).pop();
+        }
+      });*/
+      // 현재 컨텍스트가 위젯트리에 위치하고 있는지
+      if (!context.mounted) {
+        return;
+      }
+      Navigator.of(context).pop();
       // meal app 에서 사용했던 pop으로 데이터 넘기기
       /*Navigator.of(context).pop(GroceryItem(
           id: DateTime.now().toString(),
