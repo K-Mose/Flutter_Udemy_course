@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/category.dart';
+import 'package:shopping_list/models/grocery_item.dart';
 
 class NewItem extends StatefulWidget {
 
@@ -27,6 +28,13 @@ class _NewItemState extends State<NewItem> {
       print(_enteredName);
       print(_enteredQuantity);
       print(_selectedCategory);
+      // meal app 에서 사용했던 pop으로 데이터 넘기기
+      Navigator.of(context).pop(GroceryItem(
+          id: DateTime.now().toString(),
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory!
+      ));
     }
   }
 
