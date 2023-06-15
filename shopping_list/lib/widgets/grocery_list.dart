@@ -70,7 +70,28 @@ class _GroceryListState extends State<GroceryList> {
     // _loadItems();
   }
 
-  void _removeItem(GroceryItem item) {
+  void _removeItem(GroceryItem item) async {
+    final url = Uri.https(BASE_URL, "shopping-list/${item.id}.json");
+    final response = await http.delete(url);
+    // Firebase Delete는 삭제 성공 여부 관계 없이 200, null로 응답
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode != 200 && context.mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Fail to delete item."),
+          action: SnackBarAction(
+            label: "close",
+            onPressed: () {ScaffoldMessenger.of(context).clearSnackBars();}
+          ),
+        )
+      );
+      setState(() {
+        // For ui update
+      });
+      return;
+    }
     setState(() {
       _groceryItems.remove(item);
     });
@@ -94,7 +115,7 @@ class _GroceryListState extends State<GroceryList> {
         itemCount: _groceryItems.length,
         // SwipeToDelete를 위한 Dismissible
         itemBuilder: (context, index) => Dismissible(
-          key: ObjectKey(_groceryItems[index]),
+          key:  UniqueKey(),// ValueKey(_groceryItems[index]),
           direction: DismissDirection.endToStart,
           background: Container(color: Colors.red,),
           onDismissed: (direction) {
