@@ -2,15 +2,21 @@
 
 A new Flutter project.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Firebase real-time db 연결하기 
+1. https://firebase.google.com/?hl=ko 로그인, 콘솔로 이동
+2. 프로젝트 추가, (애널리틱스 사용 설정 해제)
+3. 메뉴 > 빌드 > Realtime Database 
+   1. base url 복사 후 사용
+   2. 보안 규칙 수정 
+        ```json
+        {
+          /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+          "rules": {
+            ".read": true,
+            ".write": true
+          }
+         }
+        ```
+4. **http** library 추가 `flutter pub add http`
+5. **http** post: `http.post(url, `
+         

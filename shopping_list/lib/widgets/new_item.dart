@@ -24,9 +24,14 @@ class _NewItemState extends State<NewItem> {
   var _enteredName = "";
   var _enteredQuantity = 0;
   var _selectedCategory = categories[Categories.vegetables]; // 초기값설정
+  var _isSending = false;
+
   final tc = TextEditingController();
   var controller = TextEditingController();
   void _saveItem() async {
+    setState(() {
+      _isSending = true;
+    });
     // formState에 속해있는 모든 validation 실행, pass: true, fail: false
     if(_formKey.currentState!.validate()) {
       // 상태에 formField 이터를 저장
@@ -60,7 +65,13 @@ class _NewItemState extends State<NewItem> {
       if (!context.mounted) {
         return;
       }
-      Navigator.of(context).pop();
+      final Map<String,dynamic> resData = json.decode(response.body);
+      Navigator.of(context).pop(
+        GroceryItem(
+          id: resData["name"],
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory!));
       // meal app 에서 사용했던 pop으로 데이터 넘기기
       /*Navigator.of(context).pop(GroceryItem(
           id: DateTime.now().toString(),
@@ -165,15 +176,19 @@ class _NewItemState extends State<NewItem> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () {
+                    onPressed: _isSending ? null : () {
                       _formKey.currentState!.reset();
                     },
                     child: const Text("Reset")
                   ),
                   const SizedBox(width: 20,),
                   ElevatedButton(
-                    onPressed: _saveItem,
-                    child: const Text("Add Item")
+                    onPressed: _isSending ? null :  _saveItem,
+                    child: _isSending ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator()
+                    ) :  const Text("Add Item")
                   )
                 ],
               )

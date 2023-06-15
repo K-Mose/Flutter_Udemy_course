@@ -21,10 +21,10 @@ class GroceryList extends StatefulWidget {
 
 class _GroceryListState extends State<GroceryList> {
   final List<GroceryItem> _groceryItems = [];
+  var _isLoading = true;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadItems();
   }
@@ -47,15 +47,21 @@ class _GroceryListState extends State<GroceryList> {
       setState(() {
         _groceryItems.clear();
         _groceryItems.addAll(_loadedItems);
+        _isLoading = false;
       });
     }
   }
 
   void _addItem() async {
-    await Navigator.of(context).push<GroceryItem>(
+    final newItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(builder: (context) => NewItem(),)
     );
-    _loadItems();
+    if (newItem != null) {
+      setState(() {
+        _groceryItems.add(newItem!);
+      });
+    }
+    // _loadItems();
   }
 
   void _removeItem(GroceryItem item) {
@@ -76,7 +82,8 @@ class _GroceryListState extends State<GroceryList> {
           )
         ],
       ),
-      body: (_groceryItems.isNotEmpty) ? ListView.builder(
+      body: (_isLoading) ? const Center(child: CircularProgressIndicator(),) :
+      (_groceryItems.isNotEmpty) ? ListView.builder(
         itemCount: _groceryItems.length,
         // SwipeToDelete를 위한 Dismissible
         itemBuilder: (context, index) => Dismissible(
