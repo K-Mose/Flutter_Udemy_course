@@ -43,6 +43,7 @@ class _ImageInputState extends State<ImageInput> {
       Image.file(_selectedImage!);
     }
     return Container(
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: Theme.of(context).colorScheme.primary.withOpacity(0.2)),
         borderRadius: const BorderRadius.all(Radius.circular(10)),

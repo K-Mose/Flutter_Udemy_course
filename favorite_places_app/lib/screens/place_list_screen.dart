@@ -19,14 +19,16 @@ class PlaceListScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Your Place"),
         actions: [
-          IconButton(onPressed: () {
-            Navigator.of(context).pushNamed(
-              NewPlaceScreen.routeName
-            );
-          }, icon: const Icon(Icons.add))
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(NewPlaceScreen.routeName);
+              },
+              icon: const Icon(Icons.add))
         ],
       ),
-      body: PlacesList(placeList: placeList),
+      body: Padding(
+          padding: const EdgeInsets.all(5),
+          child: PlacesList(placeList: placeList)),
     );
   }
 }

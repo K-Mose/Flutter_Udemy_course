@@ -42,6 +42,7 @@ dependencies:
   # https://pub.dev/packages/image_picker
   # ios info.plist 설정 필수
   image_picker: ^0.8.9
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:

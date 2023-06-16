@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:favorite_places_app/model/place.dart';
 import 'package:favorite_places_app/providers/place_provider.dart';
 import 'package:favorite_places_app/widgets/image_input.dart';
+import 'package:favorite_places_app/widgets/location_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,6 +52,8 @@ class NewPlaceScreen extends ConsumerWidget {
                 _selectedImage = image;
               },),
               const SizedBox(height: 16,),
+              LocationInput(),
+              const SizedBox(height: 10,),
               ElevatedButton.icon(
                 onPressed: () {
                   // Adding image validation

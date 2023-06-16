@@ -34,6 +34,10 @@ class PlacesList extends ConsumerWidget {
                     arguments: placeList[index]
                 );
               },
+              leading: CircleAvatar(
+                radius: 26,
+                backgroundImage: FileImage(placeList[index].image),
+              ),
               title: Text(
                 placeList[index].title,
                 style: const TextStyle(color: Colors.white),
