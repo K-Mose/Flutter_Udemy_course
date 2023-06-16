@@ -8,6 +8,7 @@ class NewPlaceScreen extends ConsumerWidget {
   static const routeName = "/newPlace";
   final _formKey = GlobalKey<FormState>();
   var _enteredTitle = "";
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(placeProvider.notifier);
@@ -15,16 +16,20 @@ class NewPlaceScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Add new Place"),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-              child: TextFormField(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(12),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextFormField(
                 decoration: const InputDecoration(
                   label: Text("Title")
+                ),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -36,27 +41,22 @@ class NewPlaceScreen extends ConsumerWidget {
                   _enteredTitle = value!;
                 },
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      notifier.addPlace(Place(
-                        id: DateTime.now().toString(),
-                        title: _enteredTitle
-                      ));
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  icon: const Icon(Icons.add),
-                  label: const Text("Add Place")
-                )
-              ],
-            )
-          ]
+              const SizedBox(height: 16,),
+              ElevatedButton.icon(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    notifier.addPlace(Place(
+                      title: _enteredTitle
+                    ));
+                    Navigator.of(context).pop();
+                  }
+                },
+                icon: const Icon(Icons.add),
+                label: const Text("Add Place")
+              )
+            ]
+          ),
         ),
       ),
     );

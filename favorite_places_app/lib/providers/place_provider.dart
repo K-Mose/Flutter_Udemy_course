@@ -8,6 +8,10 @@ class _PlaceNotifier extends StateNotifier<List<Place>> {
   _PlaceNotifier() : super([]);
 
   void addPlace(Place place) {
-    state = [...state, place];
+    state = [place, ...state];
+  }
+
+  void removePlace(Place place) {
+    state = [...state.where((p) => p != place)];
   }
 }
