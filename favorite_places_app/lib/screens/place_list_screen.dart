@@ -9,7 +9,7 @@ import '../model/place.dart';
 
 class PlaceListScreen extends ConsumerWidget {
   const PlaceListScreen({Key? key}) : super(key: key);
-  static const routeName = "/placeList";
+  static const routeName = "/";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

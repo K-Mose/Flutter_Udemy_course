@@ -19,7 +19,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.1 <4.0.0'
+  # dart target sdk
+  sdk: '>=2.19.2 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -38,6 +39,9 @@ dependencies:
   google_fonts: ^5.0.0
   flutter_riverpod: ^2.3.6
   uuid: ^3.0.7
+  # https://pub.dev/packages/image_picker
+  # ios info.plist 설정 필수
+  image_picker: ^0.8.9
 
 dev_dependencies:
   flutter_test:
