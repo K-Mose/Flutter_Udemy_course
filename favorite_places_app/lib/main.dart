@@ -1,4 +1,9 @@
+import 'package:favorite_places_app/model/place.dart';
+import 'package:favorite_places_app/screens/new_place_screen.dart';
+import 'package:favorite_places_app/screens/place_detail_screen.dart';
+import 'package:favorite_places_app/screens/place_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final colorScheme = ColorScheme.fromSeed(
@@ -25,7 +30,7 @@ final theme = ThemeData().copyWith(
 );
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,11 +40,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Scaffold(),
+      theme: theme,
+      home: const PlaceListScreen(),
+      initialRoute: PlaceListScreen.routeName,
+      routes: <String, WidgetBuilder> {
+        NewPlaceScreen.routeName: (context) => NewPlaceScreen()
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == PlaceDetailScreen.routeName) {
+          final place = settings.arguments! as Place;
+          return MaterialPageRoute(builder: (context) {
+            return PlaceDetailScreen(place: place);
+          });
+        }
+      },
     );
   }
 }
