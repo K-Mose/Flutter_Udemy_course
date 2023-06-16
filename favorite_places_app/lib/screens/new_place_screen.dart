@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:favorite_places_app/model/place.dart';
 import 'package:favorite_places_app/providers/place_provider.dart';
 import 'package:favorite_places_app/widgets/image_input.dart';
@@ -9,6 +11,7 @@ class NewPlaceScreen extends ConsumerWidget {
   static const routeName = "/newPlace";
   final _formKey = GlobalKey<FormState>();
   var _enteredTitle = "";
+  File? _selectedImage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,14 +47,18 @@ class NewPlaceScreen extends ConsumerWidget {
               ),
               // Image Input
               const SizedBox(height: 16,),
-              ImageInput(),
+              ImageInput(onPickImage: (image) {
+                _selectedImage = image;
+              },),
               const SizedBox(height: 16,),
               ElevatedButton.icon(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  // Adding image validation
+                  if (_formKey.currentState!.validate() || _selectedImage != null) {
                     _formKey.currentState!.save();
                     notifier.addPlace(Place(
-                      title: _enteredTitle
+                      title: _enteredTitle,
+                      image: _selectedImage!
                     ));
                     Navigator.of(context).pop();
                   }
