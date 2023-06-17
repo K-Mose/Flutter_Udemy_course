@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:favorite_places_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
 
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key});
@@ -43,12 +47,23 @@ class _LocationInputState extends State<LocationInput> {
     });
 
     locationData = await location.getLocation();
+    final lat = locationData.latitude;
+    final long = locationData.longitude;
+    final API_URL = "$API_GOOGLE_GEO_URL?latlng=$lat,$long&key=$MAP_API_KEYS";
+    final url = Uri.parse(API_URL);
+    final response = await http.get(url);
+
+    final Map<String,dynamic> resData = jsonDecode(response.body);
+    final address = resData['results'][0]["formatted_address"];
+    print(address);
+
 
     setState(() {
       _isGettingLocation = false;
     });
 
     print("lat / long ${locationData.latitude} / ${locationData.longitude}");
+    print(response.body);
   }
 
   @override
