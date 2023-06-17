@@ -7,9 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({super.key, required this.setLocation});
+  const LocationInput({super.key, required this.onSelectLocation});
 
-  final void Function(PlaceLocation place) setLocation;
+  final void Function(PlaceLocation place) onSelectLocation;
 
   @override
   State<LocationInput> createState() => _LocationInputState();
@@ -18,18 +18,6 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   PlaceLocation? _selectedLocation;
   var _isGettingLocation = false;
-
-  String get locationImage {
-    if (_selectedLocation == null) {
-      return '';
-    }
-    final lat = _selectedLocation!.latitude;
-    final long = _selectedLocation!.longitude;
-    return "$API_GOOGLE_MAP_STATIC_URL?center=$lat,$long&zoom=16"
-        // label: 마커에서 보일 라벨
-        "&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$long"
-        "&key=$MAP_API_KEYS";
-  }
 
   void _getCurrentLocation() async {
     setState(() {
@@ -82,6 +70,7 @@ class _LocationInputState extends State<LocationInput> {
     setState(() {
       _isGettingLocation = false;
       _selectedLocation = PlaceLocation(latitude: lat, longitude: long, address: address);
+      widget.onSelectLocation(_selectedLocation!);
     });
   }
 
@@ -102,7 +91,7 @@ class _LocationInputState extends State<LocationInput> {
           alignment: Alignment.center,
           child: (_selectedLocation != null) 
               ? Image.network(
-                  locationImage,
+                  locationImage(_selectedLocation),
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,

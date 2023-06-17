@@ -54,7 +54,7 @@ class NewPlaceScreen extends ConsumerWidget {
               },),
               const SizedBox(height: 16,),
               LocationInput(
-                setLocation: (location) {
+                onSelectLocation: (location) {
                   _selectedLocation = location;
                 },
               ),
@@ -62,7 +62,9 @@ class NewPlaceScreen extends ConsumerWidget {
               ElevatedButton.icon(
                 onPressed: () {
                   // Adding image validation
-                  if (_formKey.currentState!.validate() || _selectedImage != null) {
+                  if (_formKey.currentState!.validate()
+                      || _selectedImage != null
+                      || _selectedLocation != null) {
                     _formKey.currentState!.save();
                     notifier.addPlace(Place(
                       title: _enteredTitle,

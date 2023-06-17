@@ -42,6 +42,12 @@ class PlacesList extends ConsumerWidget {
                 placeList[index].title,
                 style: const TextStyle(color: Colors.white),
               ),
+              subtitle: Text(
+                placeList[index].location.address,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground
+                ),
+              ),
             ),
           ),
     );
