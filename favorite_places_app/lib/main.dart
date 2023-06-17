@@ -1,4 +1,5 @@
 import 'package:favorite_places_app/screens/map_screen.dart';
+import 'package:favorite_places_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:favorite_places_app/model/place.dart';
 import 'package:favorite_places_app/screens/new_place_screen.dart';
 import 'package:favorite_places_app/screens/place_detail_screen.dart';
 import 'package:favorite_places_app/screens/place_list_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 final colorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
@@ -37,7 +39,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -56,13 +58,26 @@ class MyApp extends StatelessWidget {
           });
         }
         if (settings.name == MapScreen.routeName) {
-          final args = settings.arguments! as List<dynamic>;
-          final location = args[0] as PlaceLocation;
-          final isSelecting = args[1] as bool;
-
-          return MaterialPageRoute(
+          final List<dynamic>? args = settings.arguments as List<dynamic>?;
+          final location = cast<PlaceLocation>(args?[0]);
+          final isSelecting = cast<bool>(args?[1]);
+          bool isSelected = false;
+          if (args == null) {
+            return MaterialPageRoute<LatLng>(
+                builder: (context) =>
+                    const MapScreen()
+            );
+          }
+          if (args.length > 2) {
+            isSelected = args[2];
+          }
+          return MaterialPageRoute<LatLng>(
               builder: (context) =>
-                  MapScreen(location: location, isSelecting: isSelecting,)
+                  MapScreen(
+                    location: location!,
+                    isSelecting: isSelecting!,
+                    isSelected: isSelected,
+                  )
           );
         }
       },

@@ -12,41 +12,59 @@ class MapScreen extends StatefulWidget {
       address: "Seoul"
     ),
     this.isSelecting = true,
+    this.isSelected = false,
   });
 
   final PlaceLocation location;
   final bool isSelecting;
+  final bool isSelected;
 
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  LatLng? _pickedLocation;
 
   @override
   Widget build(BuildContext context) {
     final location = widget.location;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.location.address),
+        title: Text(widget.isSelecting
+                  ? "Pick Your Location"
+                  : "Your Location"
+                ),
         actions: [
           if (widget.isSelecting)
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop(_pickedLocation);
+              },
               icon: const Icon(Icons.save)
             )
         ],
       ),
       // google_maps_flutter 라이브러리
       body: GoogleMap(
+        onTap: !widget.isSelecting ? null : (position) {
+          setState(() {
+            _pickedLocation = position;
+          });
+        },
         initialCameraPosition: CameraPosition(
           target: LatLng(location.latitude, location.longitude),
           zoom: 13
         ),
-        markers: {
+        markers: (
+                  _pickedLocation == null
+                      && widget.isSelecting
+                      && !widget.isSelected
+                ) ? {} : {
           Marker(
             markerId: const MarkerId('m1'),
-            position: LatLng(location.latitude, location.longitude),
+            position: _pickedLocation
+                ?? LatLng(location.latitude, location.longitude),
           ),
         },
       ),
