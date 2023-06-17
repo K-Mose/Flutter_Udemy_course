@@ -38,8 +38,17 @@ class _LocationInputState extends State<LocationInput> {
       }
     }
 
+    setState(() {
+      _isGettingLocation = true;
+    });
+
     locationData = await location.getLocation();
 
+    setState(() {
+      _isGettingLocation = false;
+    });
+
+    print("lat / long ${locationData.latitude} / ${locationData.longitude}");
   }
 
   @override
@@ -57,13 +66,13 @@ class _LocationInputState extends State<LocationInput> {
           height: 170,
           width: double.infinity,
           alignment: Alignment.center,
-          child: Text(
+          child: (!_isGettingLocation) ? Text(
             "No Location Chosen",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
               color: Theme.of(context).colorScheme.onBackground
             )
-          ),
+          ) : const CircularProgressIndicator(),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
