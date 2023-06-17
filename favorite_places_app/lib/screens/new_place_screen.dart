@@ -13,6 +13,7 @@ class NewPlaceScreen extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
   var _enteredTitle = "";
   File? _selectedImage;
+  PlaceLocation? _selectedLocation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +53,11 @@ class NewPlaceScreen extends ConsumerWidget {
                 _selectedImage = image;
               },),
               const SizedBox(height: 16,),
-              LocationInput(),
+              LocationInput(
+                setLocation: (location) {
+                  _selectedLocation = location;
+                },
+              ),
               const SizedBox(height: 10,),
               ElevatedButton.icon(
                 onPressed: () {
@@ -61,7 +66,8 @@ class NewPlaceScreen extends ConsumerWidget {
                     _formKey.currentState!.save();
                     notifier.addPlace(Place(
                       title: _enteredTitle,
-                      image: _selectedImage!
+                      image: _selectedImage!,
+                      location: _selectedLocation!
                     ));
                     Navigator.of(context).pop();
                   }
