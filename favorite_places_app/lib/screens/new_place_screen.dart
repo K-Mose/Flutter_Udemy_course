@@ -66,11 +66,11 @@ class NewPlaceScreen extends ConsumerWidget {
                       || _selectedImage != null
                       || _selectedLocation != null) {
                     _formKey.currentState!.save();
-                    notifier.addPlace(Place(
-                      title: _enteredTitle,
-                      image: _selectedImage!,
-                      location: _selectedLocation!
-                    ));
+                    notifier.addPlace(
+                      _enteredTitle,
+                      _selectedImage!,
+                      _selectedLocation!
+                    );
                     Navigator.of(context).pop();
                   }
                 },
