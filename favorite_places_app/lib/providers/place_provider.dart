@@ -40,6 +40,25 @@ Future<Database> _getDatabase() async {
 class _PlaceNotifier extends StateNotifier<List<Place>> {
   _PlaceNotifier() : super([]);
 
+  // 데이터 로드
+  Future<void> loadPlaces() async {
+    final db = await _getDatabase();
+    // https://pub.dev/documentation/sqflite_common/latest/sqlite_api/DatabaseExecutor/query.html
+    final data = await db.query("place");
+    final places = data.map((row) => Place(
+      id: row['id'] as String,
+      title: row['title'] as String,
+      image: File(row['image'] as String),
+      location: PlaceLocation(
+        latitude: row['lat'] as double,
+        longitude: row['long'] as double,
+        address: row['address'] as String
+      )
+    )).toList();
+
+    state = places;
+  }
+
   void addPlace(String title, File image, PlaceLocation location) async {
     // 앱에 따라서 경로가 다르기 때문에 경로를 다르게 가져옴
     final appDir = await syspaths.getApplicationDocumentsDirectory();

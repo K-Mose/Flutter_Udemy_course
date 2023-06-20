@@ -7,12 +7,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/place.dart';
 
-class PlaceListScreen extends ConsumerWidget {
+class PlaceListScreen extends ConsumerStatefulWidget {
   const PlaceListScreen({Key? key}) : super(key: key);
   static const routeName = "/";
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() {
+    return _PlaceScreenState();
+  }
+}
+class _PlaceScreenState extends ConsumerState<PlaceListScreen> {
+  late Future<void> _placeFuture;
+
+  @override
+  void initState() {
+    _placeFuture = ref.read(placeProvider.notifier).loadPlaces();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     List<Place> placeList = ref.watch(placeProvider);
 
     return Scaffold(
@@ -28,7 +42,14 @@ class PlaceListScreen extends ConsumerWidget {
       ),
       body: Padding(
           padding: const EdgeInsets.all(5),
-          child: PlacesList(placeList: placeList)),
+          child: FutureBuilder(
+            future: _placeFuture,
+            builder: (context, snapshot) =>
+              snapshot.connectionState == ConnectionState.waiting
+                  ? const Center(child: CircularProgressIndicator(),)
+                  : PlacesList(placeList: placeList)
+          )
+      ),
     );
   }
 }
