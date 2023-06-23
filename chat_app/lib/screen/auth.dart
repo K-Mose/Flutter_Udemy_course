@@ -10,6 +10,22 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   var _isLogin = true;
 
+  final _formKey = GlobalKey<FormState>();
+
+  var _enteredEmaiil = '';
+  var _enteredPassword = '';
+
+  final emailTc = TextEditingController();
+  final passwordTc = TextEditingController();
+
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print(_enteredEmaiil);
+      print(_enteredPassword);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +51,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Form(
+                      key: _formKey,
                       child: Column(
                         // content가 필요한 만큼만 공간을 갖음
                         mainAxisSize: MainAxisSize.min,
@@ -48,6 +65,16 @@ class _AuthScreenState extends State<AuthScreen> {
                             autocorrect: false,
                             // 첫 글자 대문자로 써짐 방지
                             textCapitalization: TextCapitalization.none,
+                            validator: (value) {
+                              if (value == null || value.isEmpty
+                                  || !value.contains('@')) {
+                                return "Please enter a valid email address";
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _enteredEmaiil = value!;
+                            },
                           ),
                           TextFormField(
                             decoration: const InputDecoration(
@@ -55,10 +82,19 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                             // 입력값 숨김
                             obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.trim().length < 6) {
+                                return "Password must be at least 6 characters long";
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _enteredPassword = value!;
+                            },
                           ),
                           const SizedBox(height: 12,),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: _submit,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context).colorScheme
                                   .primaryContainer
