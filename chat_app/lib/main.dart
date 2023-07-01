@@ -1,4 +1,5 @@
 import 'package:chat_app/screen/chat.dart';
+import 'package:chat_app/screen/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,10 @@ class App extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             // snapshot은 stream으로 연결된 값에 접근
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // 인증 토큰 값을 찾는 동안 띄워줄 splashScreen
+              return const SplashScreen();
+            }
             if (snapshot.hasData) {
               return const ChatScreen();
             }
