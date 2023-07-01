@@ -1,3 +1,5 @@
+import 'package:chat_app/screen/chat.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -27,7 +29,19 @@ class App extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromARGB(255, 63, 17, 177)),
         ),
-        home: const AuthScreen()
+        // futureBuilder와 비슷한 빌더
+        // streamBuilder는 지속적으로 값을 생산 가능함
+        home: StreamBuilder(
+          // authStateChanges
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            // snapshot은 stream으로 연결된 값에 접근
+            if (snapshot.hasData) {
+              return const ChatScreen();
+            }
+            return const AuthScreen();
+          },
+        )
     );
   }
 }
