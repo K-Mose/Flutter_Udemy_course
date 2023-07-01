@@ -42,6 +42,7 @@ class App extends StatelessWidget {
               return const SplashScreen();
             }
             if (snapshot.hasData) {
+              print("snapshot: ${snapshot.data}");
               return const ChatScreen();
             }
             return const AuthScreen();

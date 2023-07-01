@@ -16,7 +16,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  var _enteredEmaiil = '';
+  var _enteredEmail = '';
   var _enteredPassword = '';
 
   final emailTc = TextEditingController();
@@ -25,7 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
   void _submit() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredEmaiil);
+      print(_enteredEmail);
       print(_enteredPassword);
     }
 
@@ -33,7 +33,7 @@ class _AuthScreenState extends State<AuthScreen> {
       // login
       try {
         final userCredentials = await _firebase.signInWithEmailAndPassword(
-            email: _enteredPassword, password: _enteredPassword);
+            email: _enteredEmail, password: _enteredPassword);
       } on FirebaseAuthException catch (error) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message ?? 'Authentication failed')));
@@ -43,7 +43,7 @@ class _AuthScreenState extends State<AuthScreen> {
       try {
         //
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
-            email: _enteredEmaiil, password: _enteredPassword);
+            email: _enteredEmail, password: _enteredPassword);
         print(userCredentials);
       } on FirebaseAuthException catch(error) {
         if (error.code == 'email-already-in-use') {
@@ -102,7 +102,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               return null;
                             },
                             onSaved: (value) {
-                              _enteredEmaiil = value!;
+                              _enteredEmail = value!;
                             },
                           ),
                           TextFormField(
