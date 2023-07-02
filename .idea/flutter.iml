@@ -27,6 +27,18 @@
       <excludeFolder url="file://$MODULE_DIR$/flutter_complete_guide/build" />
       <excludeFolder url="file://$MODULE_DIR$/flutter_complete_guide/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/flutter_complete_guide/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/chat_app/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/chat_app/build" />
+      <excludeFolder url="file://$MODULE_DIR$/chat_app/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/shopping_list/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/shopping_list/build" />
+      <excludeFolder url="file://$MODULE_DIR$/shopping_list/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/favorite_places_app/build" />
+      <excludeFolder url="file://$MODULE_DIR$/favorite_places_app/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/favorite_places_app/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/new_meal_ap/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/new_meal_ap/build" />
+      <excludeFolder url="file://$MODULE_DIR$/new_meal_ap/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

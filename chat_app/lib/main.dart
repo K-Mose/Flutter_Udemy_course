@@ -1,12 +1,12 @@
-import 'package:chat_app/screen/chat.dart';
-import 'package:chat_app/screen/splash.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-import 'package:chat_app/screen/auth.dart';
+import 'package:chat_app/screens/chat.dart';
+import 'package:chat_app/screens/splash.dart';
+import 'package:chat_app/screens/auth.dart';
 
 void main() async {
   // Unhandled Exception: Binding has not yet been initialized.
