@@ -27,6 +27,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final passwordTc = TextEditingController();
 
   File? _selectedImage;
+  var _isAuthenticating = false;
 
   void _submit() async {
     if(!_isLogin && _selectedImage == null) {
@@ -38,25 +39,24 @@ class _AuthScreenState extends State<AuthScreen> {
       print(_enteredPassword);
     }
 
-    if (_isLogin) {
-      // login
-      try {
+    try {
+      setState(() {
+        _isAuthenticating = true;
+      });
+      if (_isLogin) {
+        // login
         final userCredentials = await _firebase.signInWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
-      } on FirebaseAuthException catch (error) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message ?? 'Authentication failed')));
-      }
-    } else {
-      // sign up
-      try {
+      } else {
+        // sign up
         //
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
 
         // 계정 생성이 완료된 후 해당 계정의 uid를 이용해 이미지 업로드
         // ref = firebase cloud storage의 정보를 줌
-        final storageRef = FirebaseStorage.instance.ref()
+        final storageRef = FirebaseStorage.instance
+            .ref()
             // 최상위 경로의 하위 경로에 접근(또는 추가)
             .child('user_images')
             .child("${userCredentials.user!.uid}.jpg");
@@ -66,13 +66,20 @@ class _AuthScreenState extends State<AuthScreen> {
         final imageUrl = await storageRef.getDownloadURL();
         print(imageUrl);
         print(userCredentials);
-      } on FirebaseAuthException catch(error) {
-        if (error.code == 'email-already-in-use') {
-          // .. 
-        }
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message ?? 'Authentication failed')));
       }
+      setState(() {
+        _isAuthenticating = false;
+      });
+    } on FirebaseAuthException catch (error) {
+      if (error.code == 'email-already-in-use') {
+        // ..
+      }
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.message ?? 'Authentication failed')));
+      setState(() {
+        _isAuthenticating = false;
+      });
     }
   }
 
@@ -147,26 +154,30 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                           const SizedBox(height: 12,),
-                          ElevatedButton(
-                            onPressed: _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).colorScheme
-                                  .primaryContainer
+                          if (_isAuthenticating)
+                            const CircularProgressIndicator(),
+                          if (!_isAuthenticating)
+                            ElevatedButton(
+                              onPressed: _submit,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).colorScheme
+                                    .primaryContainer
+                              ),
+                              child: Text( _isLogin ? "Login" : "Signup")
                             ),
-                            child: Text( _isLogin ? "Login" : "Signup")
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                _isLogin = !_isLogin;
-                              });
-                            },
-                            child: Text(
-                              _isLogin ? "Create an account"
-                              : 'I already have an account',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
+                          if (!_isAuthenticating)
+                            TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isLogin = !_isLogin;
+                                });
+                              },
+                              child: Text(
+                                _isLogin ? "Create an account"
+                                : 'I already have an account',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            )
                         ],
                       ),
                     ),
