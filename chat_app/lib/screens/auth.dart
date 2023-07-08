@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app/widgets/user_image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,6 +65,18 @@ class _AuthScreenState extends State<AuthScreen> {
         await storageRef.putFile(_selectedImage!);
         // 업로드된 파일의 경로를 가져옴
         final imageUrl = await storageRef.getDownloadURL();
+
+        // cloud firestore와 연결
+        // collection - firestore의 폴더
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredentials.user!.uid)
+            .set({
+              'username': 'name',
+              'email': _enteredEmail,
+              'image_url': imageUrl,
+            });
+
         print(imageUrl);
         print(userCredentials);
       }
