@@ -23,6 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   var _enteredEmail = '';
   var _enteredPassword = '';
+  var _enteredUsername = '';
 
   final emailTc = TextEditingController();
   final passwordTc = TextEditingController();
@@ -72,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .collection('users')
             .doc(userCredentials.user!.uid)
             .set({
-              'username': 'name',
+              'username': _enteredUsername,
               'email': _enteredEmail,
               'image_url': imageUrl,
             });
@@ -150,6 +151,24 @@ class _AuthScreenState extends State<AuthScreen> {
                               _enteredEmail = value!;
                             },
                           ),
+                          if (!_isLogin)
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: "Name"
+                              ),
+                              enableSuggestions: false,
+                              validator: (value) {
+                                if (value == null
+                                    || value.isEmpty
+                                    || value.trim().length < 2) {
+                                  return "Name must be at least 2 characters long";
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _enteredUsername = value!;
+                              },
+                            ),
                           TextFormField(
                             decoration: const InputDecoration(
                               labelText: "Password"
