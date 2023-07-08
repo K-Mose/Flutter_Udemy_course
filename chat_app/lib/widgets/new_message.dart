@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class NewMessage extends StatefulWidget {
@@ -9,7 +12,24 @@ class NewMessage extends StatefulWidget {
 }
 
 class _NewMessageState extends State<NewMessage> {
-  var _messageController = TextEditingController();
+  late User user;
+  late DocumentSnapshot<Map<String, dynamic>> userInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    setUserInfo();
+  }
+  
+  void setUserInfo() async {
+    user = FirebaseAuth.instance.currentUser!;
+    userInfo = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+  }
+
+  final _messageController = TextEditingController();
 
   @override
   void dispose() {
@@ -24,7 +44,20 @@ class _NewMessageState extends State<NewMessage> {
       return;
     }
 
+    // focus 상태 해제, 키보드 닫음
+    FocusScope.of(context).unfocus();
     _messageController.clear();
+
+    FirebaseFirestore.instance
+        .collection("chat")
+        // 동적으로 문서 삽입. firestore에서 id 생성
+        .add({
+          'text': enteredMessage,
+          'createdAt': Timestamp.now(),
+          'userId': user.uid,
+          'userName': userInfo.data()!['username'],
+          'userImage': userInfo.data()!['image_url'],
+        });
   }
 
   @override
